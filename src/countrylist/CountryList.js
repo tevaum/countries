@@ -1,8 +1,8 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { Country } from './Country';
 
-import { gql } from '@apollo/client';
+import './style.css';
 
 export const COUNTRY_LIST = gql`
   query CoutryList {

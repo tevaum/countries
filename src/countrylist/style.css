@@ -1,12 +1,13 @@
 .country {
     background-color: #fff;
-    color: #ffffff;
+    color: #000000;
     display: inline-block;
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 16px;
-    margin: 10px 5px;
+    margin: 10px 10px;
     max-width: 315px;
     min-width: 230px;
+    min-height: 350px;
     overflow: hidden;
     position: relative;
     text-align: left;
@@ -14,6 +15,7 @@
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     height: 300px;
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
   }
   
   .country *,
@@ -26,37 +28,20 @@
   }
   
   .country img {
+    transition: width 1s linear 0.5s, height 1s linear 0.5s;
+    -webkit-transition: width 1s linear 0.5s, height 1s linear 0.5s;
     backface-visibility: hidden;
-    max-width: 100%;
-    vertical-align: top;
+    height: 350px;
+    width: auto;
   }
-  
-  .country:before,
-  .country:after {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    content: '';
-    background-color: #b81212;
-    opacity: 0.5;
-    -webkit-transition: all 0.45s ease;
-    transition: all 0.45s ease;
+
+  .country:hover img,
+  .country.hover img {
+    width: 315px;
+    height: auto;
   }
-  
-  .country:before {
-    -webkit-transform: skew(30deg) translateX(-80%);
-    transform: skew(30deg) translateX(-80%);
-  }
-  
-  .country:after {
-    -webkit-transform: skew(-30deg) translateX(-70%);
-    transform: skew(-30deg) translateX(-70%);
-  }
-  
+
   .country figcaption {
-    position: absolute;
     top: 0px;
     bottom: 0px;
     left: 0px;
@@ -65,31 +50,7 @@
     bottom: 0;
     padding: 25px 40% 25px 20px;
   }
-  
-  .country figcaption:before,
-  .country figcaption:after {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #b81212;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-    content: '';
-    opacity: 0.5;
-    z-index: -1;
-  }
-  
-  .country figcaption:before {
-    -webkit-transform: skew(30deg) translateX(-100%);
-    transform: skew(30deg) translateX(-100%);
-  }
-  
-  .country figcaption:after {
-    -webkit-transform: skew(-30deg) translateX(-90%);
-    transform: skew(-30deg) translateX(-90%);
-  }
-  
+    
   .country h3,
   .country p {
     margin: 0;
@@ -99,7 +60,7 @@
   
   .country h3 {
     font-family: 'Teko', sans-serif;
-    font-size: 36px;
+    font-size: 20px;
     font-weight: 700;
     line-height: 1em;
     text-transform: uppercase;
@@ -123,47 +84,9 @@
   .country:hover p,
   .country.hover p {
     -webkit-transform: translateY(0);
-    transform: translateY(0);
+    transform: translateY(70);
     opacity: 0.9;
     -webkit-transition-delay: 0.2s;
     transition-delay: 0.2s;
   }
-  
-  .country:hover:before,
-  .country.hover:before {
-    -webkit-transform: skew(30deg) translateX(-20%);
-    transform: skew(30deg) translateX(-20%);
-    -webkit-transition-delay: 0.05s;
-    transition-delay: 0.05s;
-  }
-  
-  .country:hover:after,
-  .country.hover:after {
-    -webkit-transform: skew(-30deg) translateX(-10%);
-    transform: skew(-30deg) translateX(-10%);
-  }
-  
-  .country:hover figcaption:before,
-  .country.hover figcaption:before {
-    -webkit-transform: skew(30deg) translateX(-40%);
-    transform: skew(30deg) translateX(-40%);
-    -webkit-transition-delay: 0.15s;
-    transition-delay: 0.15s;
-  }
-  
-  .country:hover figcaption:after,
-  .country.hover figcaption:after {
-    -webkit-transform: skew(-30deg) translateX(-30%);
-    transform: skew(-30deg) translateX(-30%);
-    -webkit-transition-delay: 0.1s;
-    transition-delay: 0.1s;
-  }
-  
-  
-  /* Demo purposes only */
-  /*
-  body {
-    background-color: #212121;
-    text-align: center;
-  }
-  */
+
