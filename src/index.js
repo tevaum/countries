@@ -7,7 +7,26 @@ import * as serviceWorker from './serviceWorker';
 
 const client = new ApolloClient({
   uri: 'https://countries-274616.ew.r.appspot.com/',
-  cache: new InMemoryCache()
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          Country(_, { args, toReference }) {
+            if (!args.hasOwnProperty('_id')) {
+              return _;
+            }
+
+            return [
+              toReference({
+                __typename: 'Country',
+                id: args._id
+              })
+            ]
+          }
+        }
+      }
+    }
+  })
 })
 
 ReactDOM.render(

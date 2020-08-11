@@ -3,9 +3,10 @@ import { useQuery, gql, useApolloClient } from '@apollo/client';
 import { useParams, useHistory } from 'react-router-dom';
 
 import './style.css';
+import { COUNTRY_SEARCH } from '../countrylist/CountryList';
 
 export const COUNTRY_DETAILS = gql`
-  query CoutryList ($id: String!) {
+  query CountryList ($id: String!) {
     Country(_id: $id) {
         _id
         name
@@ -39,8 +40,10 @@ export const CountryDetails = () => {
     if (error)
         return <p>Error!</p>;
 
-    // const [ country, updateCountry ] = useState(data.Country[0]);
     const country = data.Country[0];
+    if (!country)
+        return <p>Country not found!</p>;
+
     const handleFieldChange = event => {
         setFields({
             ...fields,
@@ -52,7 +55,6 @@ export const CountryDetails = () => {
         event.preventDefault();
 
         const formFields = event.currentTarget.elements;
-        console.log(fields);
         const data = Object.assign({}, country, {
             name: fields.name ? fields.name : formFields.name.value,
             capital: fields.capital ? fields.capital : formFields.capital.value,
@@ -60,14 +62,20 @@ export const CountryDetails = () => {
             population: fields.population ? fields.population : formFields.population.value
         });
 
+        const result = client.readQuery({
+            query: COUNTRY_DETAILS,
+            variables: { id }
+        });
+
         client.writeQuery({
             query: COUNTRY_DETAILS,
             variables: { id },
-            data
+            data: {Country: [data]}
         })
 
         history.push('/');
     }
+
     return (
         <div className="country-details">
             <img src={country.flag.svgFile} alt={`${country.name}'s flag`} />
