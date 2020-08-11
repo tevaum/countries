@@ -1,0 +1,26 @@
+.country-details {
+    font-size: 1rem;
+}
+
+.country-details div {
+    margin-top: 0.7rem;
+}
+
+.country-details label {
+    display: inline-block;
+    width: 30%;
+}
+
+.country-details input {
+    font-size: 1rem;
+    padding: 0.7rem;
+    width: 65%;
+    border: none;
+    background-color: transparent;
+}
+
+.country-details button {
+    width: 95%;
+    padding: 0.7rem;
+    margin-bottom: 0.7rem;
+}

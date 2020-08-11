@@ -4,6 +4,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import { CountryList } from "./countrylist/CountryList";
+import { CountryDetails } from './countrydetails/CountryDetails';
 
 function App() {
   return (
@@ -15,15 +16,9 @@ function App() {
 
       <Router>
         <Switch>
-          <Route path="/" exact>
-            <CountryList />
-          </Route>
-          <Router path="/country/:id">
-            <p>Country details</p>
-          </Router>
-          <Route path="*">
-            <p>Country not found!</p>
-          </Route>
+          <Route path="/" exact children={<CountryList />} />
+          <Route path="/country/:id" children={<CountryDetails />} />
+          <Route path="*" children={<p>Page not found!</p>} />
         </Switch>
       </Router>
     </div>
