@@ -3,7 +3,6 @@ import { useQuery, gql, useApolloClient } from '@apollo/client';
 import { useParams, useHistory } from 'react-router-dom';
 
 import './style.css';
-import { COUNTRY_SEARCH } from '../countrylist/CountryList';
 
 export const COUNTRY_DETAILS = gql`
   query CountryList ($id: String!) {
@@ -60,11 +59,6 @@ export const CountryDetails = () => {
             capital: fields.capital ? fields.capital : formFields.capital.value,
             area: fields.area ? fields.area : formFields.area.value,
             population: fields.population ? fields.population : formFields.population.value
-        });
-
-        const result = client.readQuery({
-            query: COUNTRY_DETAILS,
-            variables: { id }
         });
 
         client.writeQuery({

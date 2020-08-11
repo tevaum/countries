@@ -1,9 +1,9 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
+import UserEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 
-import { CountryList, COUNTRY_LIST } from "./CountryList";
-import { act } from 'react-dom/test-utils';
+import { CountryList, COUNTRY_LIST, COUNTRY_SEARCH } from "./CountryList";
 
 describe('CountryList feature tests', () => {
   const countryListErrorMock = {
@@ -13,22 +13,87 @@ describe('CountryList feature tests', () => {
     error: new Error('Oops!')
   };
 
+  const Countries = [
+    {
+      _id: '1',
+      name: 'Brasil',
+      capital: 'Brasília',
+      area: 321,
+      population: 123,
+      flag: {
+        svgFile: 'https://example.com/bra.png'
+      },
+      topLevelDomains: {
+        _id: '1',
+        name: '.br'
+      }
+    },
+    {
+      _id: '2',
+      name: 'Belgica',
+      capital: 'Bruchelas',
+      area: 321,
+      population: 123,
+      flag: {
+        svgFile: 'https://example.com/bel.png'
+      },
+      topLevelDomains: {
+        _id: '2',
+        name: '.be'
+      }
+    },
+    {
+      _id: '3',
+      name: 'USA',
+      capital: 'Washington',
+      area: 321,
+      population: 123,
+      flag: {
+        svgFile: 'https://example.com/usa.png'
+      },
+      topLevelDomains: {
+        _id: '3',
+        name: '.us'
+      }
+    }
+  ];
+
   const countryListDataMock = {
     request: {
-      query: COUNTRY_LIST
+      query: COUNTRY_LIST,
+      variables: {}
     },
     result: {
       data: {
-        Country: [
-          {
-            _id: 1,
-            name: 'Brasil',
-            capital: 'Brasília',
-            flag: {
-              svgFile: 'https://example.com/bra.png'
-            }
-          }
-        ]
+        Country: Countries
+      }
+    }
+  };
+
+  const countrySearchEmptyDataMock = {
+    request: {
+      query: COUNTRY_SEARCH,
+      variables: {
+        terms: 'Huvs'
+      }
+    },
+    result: {
+      data: {
+        Country: Countries.filter(c => c.name.indexOf('Huvs') > -1 || c.capital.indexOf('Huvs') > -1)
+      }
+    }
+  };
+
+  const countrySearchDataMock = {
+    request: {
+      query: COUNTRY_SEARCH,
+      variables: {
+        terms: 'Br'
+      }
+    },
+    result: {
+      data: {
+        Country: Countries.filter(c => c.name.indexOf('Br') > -1 || c.capital.indexOf('Br') > -1)
       }
     }
   };
@@ -50,7 +115,7 @@ describe('CountryList feature tests', () => {
 
   it('should render CountryList, display a loading indicator and then the data', async () => {
     const doc = render(
-      <MockedProvider mocks={[countryListDataMock]}>
+      <MockedProvider mocks={[countryListDataMock]} addTypename={false} >
         <CountryList />
       </MockedProvider>
     );
@@ -59,8 +124,62 @@ describe('CountryList feature tests', () => {
 
     await act(() => doc.findByText('Brasil'));
 
-    expect(doc.queryByText('Brasil')).toBeInTheDocument();
-    expect(doc.getByText('Brasília')).toBeInTheDocument();
+    expect(doc.queryByText('USA')).toBeInTheDocument();
+    expect(doc.getByText('Washington')).toBeInTheDocument();
     expect(doc.queryByText('Loading...')).toBeNull();
   })
+
+  it('should filter the results based on the search terms', async () => {
+    const doc = render(
+      <MockedProvider mocks={[countryListDataMock, countrySearchDataMock]} addTypename={false}>
+        <CountryList />
+      </MockedProvider>
+    );
+
+    expect(doc.getByText('Loading...')).toBeInTheDocument();
+
+    await act(() => doc.findByText('USA'));
+
+    expect(doc.queryByText('Loading...')).toBeNull();    
+    const searchInput = doc.getByPlaceholderText('Country name or Capital');
+    const searchButton = doc.getByText('Search');
+    expect(searchInput).toBeInTheDocument();
+    expect(searchButton).toBeInTheDocument();
+    await act(() => UserEvent.type(searchInput, 'Br'));
+    act(() => UserEvent.click(searchButton));
+
+    expect(doc.queryByText('Loading...')).toBeInTheDocument();
+
+    await act(() => doc.findByText('Brasil'));
+    expect(doc.queryByText('USA')).toBeNull();
+
+  })
+
+  it('should filter the results based on the search terms and display country not found', async () => {
+    const doc = render(
+      <MockedProvider mocks={[countryListDataMock, countrySearchEmptyDataMock]} addTypename={false}>
+        <CountryList />
+      </MockedProvider>
+    );
+
+    expect(doc.getByText('Loading...')).toBeInTheDocument();
+
+    await act(() => doc.findByText('USA'));
+
+    expect(doc.queryByText('Loading...')).toBeNull();    
+    const searchInput = doc.getByPlaceholderText('Country name or Capital');
+    const searchButton = doc.getByText('Search');
+    expect(searchInput).toBeInTheDocument();
+    expect(searchButton).toBeInTheDocument();
+    await act(() => UserEvent.type(searchInput, 'Huvs'));
+    act(() => UserEvent.click(searchButton));
+
+    expect(doc.queryByText('Loading...')).toBeInTheDocument();
+
+    await act(() => doc.findByText('No countries found with this search terms.'));
+    expect(doc.queryByText('USA')).toBeNull();
+    expect(doc.queryByText('Brasil')).toBeNull();
+
+  })
+
 })
