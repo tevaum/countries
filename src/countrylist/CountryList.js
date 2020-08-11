@@ -6,7 +6,7 @@ import './style.css';
 
 export const COUNTRY_LIST = gql`
   query CoutryList {
-    Country(first: 50) {
+    Country(first: 50, orderBy: name_asc) {
         _id
         name
         capital
