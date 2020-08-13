@@ -19,10 +19,6 @@ export const COUNTRY_DETAILS = gql`
             _id
             name
         }
-        distanceToOtherCountries(first:5, orderBy:distanceInKm_desc) {
-            distanceInKm
-            countryName
-        }
     }
   }
 `;
@@ -41,7 +37,12 @@ export const CountryDetails = () => {
 
     const country = data.Country[0];
     if (!country)
-        return <p>Country not found!</p>;
+        return  (
+            <React.Fragment>
+                <p>Country not found!</p>
+                <button onClick={() => history.push('/')}>Back to Listing</button>
+            </React.Fragment>
+        );
 
     const handleFieldChange = event => {
         setFields({
@@ -76,31 +77,31 @@ export const CountryDetails = () => {
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="name">Name: </label>
-                    <input type="text" id="name" value={fields.name ? fields.name : country.name} onChange={handleFieldChange} />
+                    <input type="text" id="name" value={fields.name ? fields.name : country.name} onChange={handleFieldChange} placeholder="Name" />
                 </div>
 
                 <div>
                     <label htmlFor="name">Capital: </label>
-                    <input type="text" id="capital" value={fields.capital ? fields.capital : country.capital} onChange={handleFieldChange} />
+                    <input type="text" id="capital" value={fields.capital ? fields.capital : country.capital} onChange={handleFieldChange} placeholder="Capital" />
                 </div>
 
                 <div>
                     <label htmlFor="name">Area: </label>
-                    <input type="text" id="area" value={fields.area ? fields.area : country.area} onChange={handleFieldChange} />
+                    <input type="text" id="area" value={fields.area ? fields.area : country.area} onChange={handleFieldChange} placeholder="Area" />
                 </div>
 
                 <div>
                     <label htmlFor="name">Populaton: </label>
-                    <input type="text" id="population" value={fields.population ? fields.population : country.population} onChange={handleFieldChange} />
+                    <input type="text" id="population" value={fields.population ? fields.population : country.population} onChange={handleFieldChange} placeholder="Population" />
                 </div>
 
                 <div>
                     <label htmlFor="name">TLD: </label>
-                    <input type="text" id="tld" value={country.topLevelDomains.map(tld => tld.name).join(', ')} readOnly />
+                    <input type="text" id="tld" value={country.topLevelDomains.map(tld => tld.name).join(', ')} readOnly placeholder="TLD" />
                 </div>
 
                 <button type="submit">Update Country Info</button>
-                <button onClick={() => history.push('/')}> Back to Listing</button>
+                <button onClick={() => history.push('/')}>Back to Listing</button>
             </form>
         </div>
     );
