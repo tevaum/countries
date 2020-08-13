@@ -1,6 +1,7 @@
 image: docker:dind
 stages:
   - test
+  - build-and-push
 
 test:
   stage: test
@@ -10,4 +11,13 @@ test:
   script:
     - yarn test --coverage
 
-
+build-and-push:
+  stage: build-and-push
+  before_script:
+    - export DOCKER_TAG=`echo ${CI_BUILD_REF_NAME} | sed s/master/latest/`
+    - yarn install
+  script:
+    - docker build . -t tevaum/countries:${DOCKER_TAG}
+    - docker login echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin
+    - docker push tevaum/countries:${DOCKER_TAG}
+  when: on_success
