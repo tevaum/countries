@@ -5,7 +5,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import { COUNTRY_LIST} from "./countrylist/CountryList";
 import App from './App';
 
-test('nothing', () => {
+test('nothing', async () => {
   const mocks = [{
     request: {
       query: COUNTRY_LIST
@@ -18,10 +18,10 @@ test('nothing', () => {
       <App />
     </MockedProvider>
   );
-  doc.debug();
+
   expect(doc.getByText('Countries')).toBeInTheDocument();
   expect(doc.getByText('Loading...')).toBeInTheDocument();
 
-  act(() => doc.findByText('Error!'));
+  await act(() => doc.findByText('Error!'));
 })
 
