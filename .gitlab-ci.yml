@@ -1,0 +1,8 @@
+image: docker:dind
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+  - yarn test --coverage
