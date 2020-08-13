@@ -13,10 +13,12 @@ test:
 
 build-and-push:
   stage: build-and-push
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   before_script:
     - export DOCKER_TAG=`echo ${CI_BUILD_REF_NAME} | sed s/master/latest/`
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json    
   script:
-    - docker build . -t tevaum/countries:${DOCKER_TAG}
-    - docker login echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin
-    - docker push tevaum/countries:${DOCKER_TAG}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dockerfile --destination tevaum/countries:$DOCKER_TAG
   when: on_success
