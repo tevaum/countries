@@ -2,6 +2,7 @@ import React from 'react';
 import { render, act } from '@testing-library/react';
 import UserEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
+import { MemoryRouter } from 'react-router-dom';
 
 import { CountryList, COUNTRY_LIST, COUNTRY_SEARCH } from "./CountryList";
 
@@ -80,6 +81,20 @@ describe('CountryList feature tests', () => {
     result: {
       data: {
         Country: Countries.filter(c => c.name.indexOf('Huvs') > -1 || c.capital.indexOf('Huvs') > -1)
+      }
+    }
+  };
+
+  const countrySearchDataUSAMock = {
+    request: {
+      query: COUNTRY_SEARCH,
+      variables: {
+        terms: 'USA'
+      }
+    },
+    result: {
+      data: {
+        Country: Countries.filter(c => c.name.indexOf('USA') > -1 || c.capital.indexOf('USA') > -1)
       }
     }
   };
@@ -182,4 +197,34 @@ describe('CountryList feature tests', () => {
 
   })
 
+  it('should filter the results based on the search terms and display USA card', async () => {
+    const doc = render(
+      <MockedProvider mocks={[countryListDataMock, countrySearchDataUSAMock]} addTypename={false}>
+        <MemoryRouter>
+          <CountryList />
+        </MemoryRouter>
+      </MockedProvider>
+    );
+
+    expect(doc.getByText('Loading...')).toBeInTheDocument();
+
+    await act(() => doc.findByText('Brasil'));
+
+    expect(doc.queryByText('Loading...')).toBeNull();    
+    const searchInput = doc.getByPlaceholderText('Country name or Capital');
+    const searchButton = doc.getByText('Search');
+    expect(searchInput).toBeInTheDocument();
+    expect(searchButton).toBeInTheDocument();
+    await act(() => UserEvent.type(searchInput, 'USA'));
+    act(() => UserEvent.click(searchButton));
+
+    expect(doc.queryByText('Loading...')).toBeInTheDocument();
+
+    await act(() => doc.findByText('USA'));
+
+    expect(doc.queryByText('USA')).toBeInTheDocument();
+    expect(doc.queryByText('Brasil')).toBeNull();
+    const moreInfoButton = doc.getByText('More Info');
+    act(() => UserEvent.click(moreInfoButton));
+  })
 })
