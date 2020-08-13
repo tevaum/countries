@@ -4,5 +4,10 @@ stages:
 
 test:
   stage: test
+  image: nodejs
+  before_script:
+    - yarn install
   script:
-  - yarn test --coverage
+    - yarn test --coverage
+
+
