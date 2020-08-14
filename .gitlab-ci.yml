@@ -29,11 +29,10 @@ deploy-ssh:
   stage: deploy
   image: debian:stable-slim
   before_script:
+    - export DOCKER_TAG=`echo ${CI_BUILD_REF_NAME} | sed s/master/latest/`
     - apt -qq update
     - apt install -qqy openssh-client
-    - echo $SSH_DEPLOY_KEY > id_deploy
-    - chmod 0600 id_deploy
-    - export DOCKER_TAG=`echo ${CI_BUILD_REF_NAME} | sed s/master/latest/`
-    - head -n4 id_deploy
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
   script:
-    - ssh -o "StrictHostKeyChecking no" -i ./id_deploy -l tevaum 161.97.92.93 "docker pull tevaum/countries:$DOCKER_TAG && docker-compose -p countries -c /srv/countries/docker-compose.yml up -d"
+    - ssh -o "StrictHostKeyChecking no" -l tevaum 161.97.92.93 "docker pull tevaum/countries:$DOCKER_TAG && docker-compose -p countries -c /srv/countries/docker-compose.yml up -d"
