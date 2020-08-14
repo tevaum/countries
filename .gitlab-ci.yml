@@ -2,6 +2,7 @@ image: docker
 stages:
   - test
   - build-and-push
+  - deploy
 
 test:
   stage: test
@@ -22,3 +23,13 @@ build-and-push:
   script:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dockerfile --destination tevaum/countries:$DOCKER_TAG
   when: on_success
+
+deploy-ssh:
+  stage: deploy
+  image: debian:stable-slim
+  before_script:
+    - apt -qq update
+    - apt install -yqq openssh-client
+    - echo $SSH_DEPLOY_KEY > id_deploy
+  script:
+    - ssh -i ./id_deploy -l tevaum 161.97.92.93 'docker pull '
