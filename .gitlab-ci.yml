@@ -1,3 +1,4 @@
+
 image: docker
 stages:
   - test
@@ -31,5 +32,7 @@ deploy-ssh:
     - apt -qq update
     - apt install -yqq openssh-client
     - echo $SSH_DEPLOY_KEY > id_deploy
+    - chmod 0600 id_deploy
+    - export DOCKER_TAG=`echo ${CI_BUILD_REF_NAME} | sed s/master/latest/`
   script:
-    - ssh -i ./id_deploy -l tevaum 161.97.92.93 'docker pull '
+    - ssh -o "StringHostKeyCheking no" -i ./id_deploy -l tevaum 161.97.92.93 'docker pull "tevaum/countries:$DOCKER_TAG && docker-compose -p countries -c /srv/countries/docker-compose.yml up -d''
