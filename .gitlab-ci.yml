@@ -35,4 +35,4 @@ deploy-ssh:
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
   script:
-    - ssh -o "StrictHostKeyChecking no" -l tevaum 161.97.92.93 "docker pull tevaum/countries:$DOCKER_TAG && docker-compose -p countries -c /srv/countries/docker-compose.yml up -d"
+    - ssh -o "StrictHostKeyChecking no" -l tevaum 161.97.92.93 "docker pull tevaum/countries:$DOCKER_TAG && docker-compose -p countries -f /srv/countries/docker-compose.yml up -d"
