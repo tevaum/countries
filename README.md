@@ -1,6 +1,4 @@
-[![pipeline status](https://gitlab.com/tevaum/countries/badges/master/pipeline.svg)](https://gitlab.com/tevaum/countries/-/commits/master)
-
-[![coverage report](https://gitlab.com/tevaum/countries/badges/master/coverage.svg)](https://gitlab.com/tevaum/countries/-/commits/master)
+[![pipeline status](https://gitlab.com/tevaum/countries/badges/master/pipeline.svg)](https://gitlab.com/tevaum/countries/-/commits/master) [![coverage report](https://gitlab.com/tevaum/countries/badges/master/coverage.svg)](https://gitlab.com/tevaum/countries/-/commits/master)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

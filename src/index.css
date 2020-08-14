@@ -26,3 +26,20 @@ img {
   display: block;
   max-width: 100%;
 }
+
+input,
+button {
+    padding: 0.7rem;
+    border: solid 1px #61dbfb;
+    border-radius: 0.3rem;
+}
+
+button {
+  background-color: #61dbfb;
+  font-weight: 610;
+  cursor: pointer;
+}
+
+button.secondary {
+  background-color: #ffffff;
+}

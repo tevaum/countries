@@ -20,7 +20,28 @@
 }
 
 .country-details button {
+    margin-top: 0.7rem;
     width: 95%;
     padding: 0.7rem;
-    margin-bottom: 0.7rem;
+}
+
+@media only screen and (min-width: 720px) {
+    .country-details {
+        display: inline-block;
+        margin: 1rem auto;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        padding-bottom: 1rem;
+    }
+    
+    .country-details label {
+        width: 7rem;
+        text-align: right;
+        margin-right: 0.5rem;
+    }
+
+    .country-details button {
+        display: inline-block;
+        width: 40%;
+        margin: 2rem;
+    }
 }

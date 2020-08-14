@@ -68,7 +68,7 @@ export const CountryList = props => {
 
     return (
         <React.Fragment>
-            <div>
+            <div className="search">
                 <input type="text" defaultValue={terms} placeholder="Country name or Capital" />
                 <button onClick={handleSearchClick}>Search</button>
             </div>

@@ -101,7 +101,7 @@ export const CountryDetails = () => {
                 </div>
 
                 <button type="submit">Update Country Info</button>
-                <button onClick={() => history.push('/')}>Back to Listing</button>
+                <button className="secondary" onClick={() => history.push('/')}>Back to Listing</button>
             </form>
         </div>
     );
